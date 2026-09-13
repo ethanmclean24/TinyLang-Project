@@ -1,0 +1,39 @@
+# Milestone 1 informal TinyLang examples — DESIGN SKETCHES, not formal grammar.
+
+# Example 1 — declaration, arithmetic, output
+let correct = 7
+let total = 10
+let percent = correct * 100 / total
+
+show ("Study Session Score: " + percent + "%.")
+
+# Example 2 — comparison and conditional
+let question = "What keyword creates a new variable?"
+let answer = ask(question)
+
+if (answer == "let"):
+    show "Correct"
+else:
+    show "Review this term again"
+
+# Example 3 — while-style repetition
+let current = 1
+let total_questions = 3
+let correct_answers = 0
+
+while (current <= total_questions):
+    show("Question number " + current + ":")
+    let answer = ask("Did you answer correctly? Type yes or no.")
+
+    if (answer == "yes"):
+        correct_answers = correct_answers + 1
+
+    current = current + 1
+
+show "Final correct answers: "
+show correct_answers
+
+# These examples reflect simplicity by using a small set of clear statements:
+# let, show, ask, if, else, and while. They reflect readability by using
+# plain words and indentation-based blocks. They reflect built in functions
+# by using ask and show for the study input/output workflow.
