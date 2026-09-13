@@ -41,7 +41,6 @@ conditional execution with optional else; while-style repetition; blocks; and co
 
 
 ## 7. Expression Forms
-TODO: Describe arithmetic, comparison, logical, literal, and variable-reference expressions.
 - Arithmetic- `+`, `-`, `*`, `/`, `%`
 - Comparison- `==`, `!=`, `<`, `>`, `<=`, `>=`
 - Logical- `and`, `or`, `not` (avoids symbols for simplicity)
