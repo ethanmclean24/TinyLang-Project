@@ -5,16 +5,16 @@ let correct = 7
 let total = 10
 let percent = correct * 100 / total
 
-show ("Study Session Score: " + percent + "%.")
+show(("Study Session Score: " + percent + "%."))
 
 # Example 2 — comparison and conditional
 let question = "What keyword creates a new variable?"
 let answer = ask(question)
 
 if (answer == "let"):
-    show "Correct"
+    show("Correct")
 else:
-    show "Review this term again"
+    show("Review this term again")
 
 # Example 3 — while-style repetition
 let current = 1
@@ -30,8 +30,8 @@ while (current <= total_questions):
 
     current = current + 1
 
-show "Final correct answers: "
-show correct_answers
+show("Final correct answers: ")
+show(correct_answers)
 
 # These examples reflect simplicity by using a small set of clear statements:
 # let, show, ask, if, else, and while. They reflect readability by using

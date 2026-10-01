@@ -23,20 +23,22 @@ conditional execution with optional else; while-style repetition; blocks; and co
 - Boolean values- True/False is very important for study workflow
 - Numeric values- Keeps track of things like answers and question counts
 - Strings- Input, Output, store questions or answers or other messages
+- Arrays- Store sequences of study terms, scores, or nested arrays.
 
 ## 6. Statement Forms
 - Declaration- `let`
 - Assigment- simple `=`. Automatic memory management. 
-- Output- `show`
-- Input- `ask`. Simple built in function to make it easy to get inputs. 
+- Output- `show(expression)`
+- Input- `ask(prompt)`. A built-in function taking one prompt expression.
 - Conditionals- `if bool` or `if (conditional statement)` or `if variable`
-- repitition- `while (condition)` or `for item in [list]`
-- blocks- (indentation, new lines). Similiar to python for simplicity
+- Repetition- `while condition:` and `for item in array_expression:`.
+- Functions- `function name(parameters):` with an indented body and `return expression`.
+- Blocks- colon, newline, and exactly four additional spaces per level; no indentation tabs.
     ```
     let this = "a statement"
 
-    if (this = "a statement"):
-        return
+    if (this == "a statement"):
+        show(this)
     ```
 
 
