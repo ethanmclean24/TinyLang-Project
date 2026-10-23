@@ -1,7 +1,7 @@
 # StudyLang
 **Version:** 0.1  
 **Author:** Ethan McLean  
-**Current Milestone:** Milestone 1 — Initial Language Specification
+**Current Milestone:** M3–M5 — Token Specification, Lexer Integration, Parser and AST
 
 ## 1. Language Purpose
 A simple language with easy inputs and outputs that makes it easy for students to add course materials (like terms or questions) and study using simple console input/output.
@@ -65,9 +65,36 @@ See `examples/milestone1_examples.tiny`.
 ## 11. Implementation Status
 - [x] Project identity scaffold
 - [x] Initial language specification — Milestone 1
-- [ ] Formal grammar — later
-- [ ] Frontend/lexer/parser — later
-- [ ] AST — later
+- [x] Formal grammar — M2
+- [x] Frontend/lexer/parser — M3–M5
+- [x] AST — M5
 - [ ] Semantic analysis — later
 - [ ] Interpreter — later
 - [ ] LLVM backend/JIT — later
+
+## 12. Setup and verification
+Use Python 3.9 or newer. From the project root:
+
+```sh
+python3 -m pip install -r requirements.txt
+python3 inspect_tokens.py
+python3 frontend.py
+python3 tests/test_parser.py
+python3 -m unittest discover -s tests -p 'test_m3_m5.py' -v
+python3 tests/check_milestone1.py
+```
+
+`frontend.py` displays the new study-session source, parse tree, and AST.
+`inspect_tokens.py` displays the contextual tokens consumed by the same parser,
+including their positions and generated indentation markers. Neither executes
+StudyLang statements or asks for input. `main.py` remains the historical M1
+identity entry point; use `frontend.py` for this milestone's demonstration.
+
+## 13. Frontend API and boundaries
+- `create_parser()` returns a Lark LALR parser with StudyLang indentation handling.
+- `parse_tree(source)` returns the Lark tree; `parse(source)` returns a `Program` AST.
+- `is_valid(source)` checks syntax and indentation only.
+- Invalid input raises Lark `UnexpectedInput` or `DedentError` before transformation.
+
+See `M3_M5_EVIDENCE.md` for the token inventory, mappings, captured results,
+customizations, and attribution.
