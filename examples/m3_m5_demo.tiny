@@ -1,0 +1,18 @@
+# StudyLang: inspect the structure of a short study session.
+function percent(correct, total):
+    return correct * 100 / total
+let terms = ["declaration", "loop"]
+let correct = 0
+for term in terms:
+    let answer = ask(term)
+    if answer == "yes" and not False:
+        correct = correct + 1
+    else:
+        show("Review this term")
+let remaining = 2-correct
+while remaining > 0:
+    show("Practice again")
+    remaining = remaining - 1
+terms[0] = "let"
+show(percent(correct, 2))
+show(2 + 3 * 4)

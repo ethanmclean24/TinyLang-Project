@@ -4,6 +4,7 @@ Uses one grammar, and uses a parser to produce an AST.
 """
 import ast
 from pathlib import Path
+from pprint import pprint
 
 from lark import Lark, Transformer, UnexpectedInput
 from lark.indenter import DedentError, PythonIndenter
@@ -168,3 +169,13 @@ def is_valid(source):
         return True
     except (UnexpectedInput, DedentError):
         return False
+
+
+if __name__ == "__main__":
+    source = (ROOT / "examples/m3_m5_demo.tiny").read_text(encoding="utf-8")
+    print("SOURCE")
+    print(source)
+    print("PARSE TREE")
+    print(parse_tree(source).pretty())
+    print("AST (no execution)")
+    pprint(parse(source))
