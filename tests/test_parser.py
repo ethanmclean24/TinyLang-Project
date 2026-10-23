@@ -1,44 +1,14 @@
 from pathlib import Path
+import sys
 
-from lark import Lark, UnexpectedInput
-from lark.indenter import DedentError, PythonIndenter
-
+from lark import UnexpectedInput
+from lark.indenter import DedentError
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from frontend import create_parser
 
-
-class StudyLangIndenter(PythonIndenter):
-    """Use PythonIndenter class to identify correct indentation and thus correct block tokens."""
-
-    def handle_NL(self, token):
-        if not self.paren_level:
-            indent = token.rsplit("\n", 1)[-1]
-            if "\t" in indent:
-                raise DedentError("Use four spaces for indentation; tab characters are not allowed")
-            width = len(indent)
-            if width % 4 or width > self.indent_level[-1] + 4:
-                raise DedentError("Each block must add exactly four spaces")
-        yield from super().handle_NL(token)
-
-    def process(self, stream):
-        def checked_tokens():
-            first = True
-            for token in stream:
-                if first and token.type != self.NL_type and token.column > 1:
-                    raise DedentError("The first statement must start in column 1")
-                first = False
-                yield token
-
-        return super().process(checked_tokens())
-
-
-parser = Lark.open(
-    str(ROOT / "grammar.lark"),
-    start="start",
-    parser="lalr",
-    postlex=StudyLangIndenter(),
-    maybe_placeholders=False,
-)
+parser = create_parser()
 
 positive_tests = [
     ("Declarations and assignment", """

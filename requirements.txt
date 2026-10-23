@@ -1,1 +1,1 @@
-# Dependencies will be added in later milestones.
+lark==1.3.1
