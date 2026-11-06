@@ -1,7 +1,7 @@
 # StudyLang
 **Version:** 0.1  
 **Author:** Ethan McLean  
-**Current Milestone:** M3–M5 — Token Specification, Lexer Integration, Parser and AST
+**Current Milestone:** M6 — AST Structural Validation
 
 ## 1. Language Purpose
 A simple language with easy inputs and outputs that makes it easy for students to add course materials (like terms or questions) and study using simple console input/output.
@@ -68,6 +68,7 @@ See `examples/milestone1_examples.tiny`.
 - [x] Formal grammar — M2
 - [x] Frontend/lexer/parser — M3–M5
 - [x] AST — M5
+- [x] AST structural validation, walk, and metrics — M6
 - [ ] Semantic analysis — later
 - [ ] Interpreter — later
 - [ ] LLVM backend/JIT — later
@@ -79,6 +80,8 @@ Use Python 3.9 or newer. From the project root:
 python3 -m pip install -r requirements.txt
 python3 inspect_tokens.py
 python3 frontend.py
+python3 demo1_validate.py
+python3 -m pytest -q
 python3 tests/test_parser.py
 python3 -m unittest discover -s tests -p 'test_m3_m5.py' -v
 python3 tests/check_milestone1.py
@@ -98,3 +101,8 @@ identity entry point; use `frontend.py` for this milestone's demonstration.
 
 See `M3_M5_EVIDENCE.md` for the token inventory, mappings, captured results,
 customizations, and attribution.
+
+M6: call `validate_ast(parse(source))` from `m6_ast_tool` to check AST shape;
+malformed nodes raise `ASTValidationError`. `walk.walk(ast)` prints the AST;
+`metric.node_count(ast)` and `metric.max_depth(ast)` measure it (root depth 1).
+Names, scopes, operand types, and execution remain later work.
