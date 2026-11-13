@@ -1,7 +1,7 @@
 # StudyLang
 **Version:** 0.1  
 **Author:** Ethan McLean  
-**Current Milestone:** M6 — AST Structural Validation
+**Current Milestone:** M7 — Semantic Analysis
 
 ## 1. Language Purpose
 A simple language with easy inputs and outputs that makes it easy for students to add course materials (like terms or questions) and study using simple console input/output.
@@ -69,7 +69,7 @@ See `examples/milestone1_examples.tiny`.
 - [x] Frontend/lexer/parser — M3–M5
 - [x] AST — M5
 - [x] AST structural validation, walk, and metrics — M6
-- [ ] Semantic analysis — later
+- [x] Semantic analysis
 - [ ] Interpreter — later
 - [ ] LLVM backend/JIT — later
 
@@ -81,6 +81,7 @@ python3 -m pip install -r requirements.txt
 python3 inspect_tokens.py
 python3 frontend.py
 python3 demo1_validate.py
+python3 semantic.py
 python3 -m pytest -q
 python3 tests/test_parser.py
 python3 -m unittest discover -s tests -p 'test_m3_m5.py' -v
@@ -105,4 +106,21 @@ customizations, and attribution.
 M6: call `validate_ast(parse(source))` from `m6_ast_tool` to check AST shape;
 malformed nodes raise `ASTValidationError`. `walk.walk(ast)` prints the AST;
 `metric.node_count(ast)` and `metric.max_depth(ast)` measure it (root depth 1).
-Names, scopes, operand types, and execution remain later work.
+
+M7: pass a structurally valid `Program` to
+`SemanticAnalyzer().analyze(program)` from `semantic`. It returns the same
+AST on success and raises `SemanticError` for a semantic violation.
+
+- Variables and functions share a namespace and must be declared before use.
+  Branches, loops, and functions have local scopes. Inner declarations can
+  shadow outer names. A function can call itself.
+- Assignments preserve a variable's inferred type when both types are known.
+  Arithmetic takes numbers, `%` takes whole numbers, and logical operators and
+  `if`/`while` conditions take Booleans. Equality accepts matching types or
+  two numbers.
+- `ask` returns a string. Arrays can hold mixed values and take whole-number
+  indices. Function parameters, call results, and array elements can have
+  unknown types during analysis. Operations that depend on those types need
+  runtime checks.
+
+Run `python3 semantic.py` for positive and negative examples.
