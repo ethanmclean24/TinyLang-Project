@@ -1,0 +1,14 @@
+# A function reads the score visible at its declaration.
+let score = 1
+if True:
+    function read_score():
+        return score
+    let score = 10
+    if True:
+        score = score + 2
+        show(score)
+        show(read_score())
+    show(score)
+if True:
+    score = score + 1
+show(score)
