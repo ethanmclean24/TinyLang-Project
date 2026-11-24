@@ -1,0 +1,8 @@
+# String and array results use interpreter mode.
+let answer = ask("What keyword declares a variable? ")
+let correct = answer == "let"
+let feedback = "Correct!" if correct else "Review let"
+show(feedback)
+let terms = ["loop"] if correct else ["let", "loop"]
+for term in terms:
+    show(term)
