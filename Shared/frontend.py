@@ -5,16 +5,20 @@ Uses one grammar, and uses a parser to produce an AST.
 import ast
 from pathlib import Path
 from pprint import pprint
+import sys
+
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from lark import Lark, Transformer, UnexpectedInput
 from lark.indenter import DedentError, PythonIndenter
 
-from ast_nodes import (
+from Shared.ast_nodes import (
     Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, For, Function,
     If, Index, Let, Not, Number, Program, Return, Show, String, Variable, While,
 )
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 
 
 class StudyLangIndenter(PythonIndenter):
@@ -45,7 +49,7 @@ class StudyLangIndenter(PythonIndenter):
 
 def create_parser():
     return Lark.open(
-        str(ROOT / "grammar.lark"), start="start", parser="lalr",
+        str(Path(__file__).with_name("grammar.lark")), start="start", parser="lalr",
         postlex=StudyLangIndenter(), maybe_placeholders=False,
     )
 
@@ -163,7 +167,7 @@ def parse(source):
 
 
 def is_valid(source):
-    """Check syntax only; undefined variables and type errors are future work."""
+    """Check syntax and indentation; semantic analysis checks names and types."""
     try:
         parse_tree(source)
         return True
@@ -172,7 +176,7 @@ def is_valid(source):
 
 
 if __name__ == "__main__":
-    source = (ROOT / "examples/m3_m5_demo.tiny").read_text(encoding="utf-8")
+    source = (ROOT / "Examples/m3_m5_demo.tiny").read_text(encoding="utf-8")
     print("SOURCE")
     print(source)
     print("PARSE TREE")

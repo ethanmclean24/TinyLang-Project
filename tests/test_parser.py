@@ -6,7 +6,7 @@ from lark.indenter import DedentError
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from frontend import create_parser
+from Shared.frontend import create_parser
 
 parser = create_parser()
 

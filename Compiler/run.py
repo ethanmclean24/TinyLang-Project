@@ -4,15 +4,19 @@ import argparse
 from pathlib import Path
 import sys
 
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from lark.exceptions import UnexpectedInput
 from lark.indenter import DedentError
 
-from codegen import CompilationError, Compiler
-from frontend import parse
-from interpreter import StudyLangRuntimeError
-from jit import run_ir
-from m6_ast_tool import ASTValidationError
-from semantic import SemanticError
+from Compiler.compiler import CompilationError, Compiler
+from Shared.frontend import parse
+from Shared.errors import StudyLangRuntimeError
+from Compiler.jit import run_ir
+from Shared.m6_ast_tool import ASTValidationError
+from Compiler.optimizer import optimize_ir
+from Shared.semantic import SemanticError
 
 
 def compile_source(source: str) -> str:
@@ -24,9 +28,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Compile StudyLang with LLVM and run with MCJIT.")
     parser.add_argument("file", type=Path, help="path to a .tiny source file")
     parser.add_argument("--emit-ir", action="store_true", help="print verified IR without executing")
+    parser.add_argument("--opt", type=int, choices=(0, 1, 2, 3), default=0,
+                        help="LLVM optimization level; default is 0")
     args = parser.parse_args()
     try:
-        ir_text = compile_source(args.file.read_text(encoding="utf-8"))
+        ir_text = optimize_ir(compile_source(args.file.read_text(encoding="utf-8")), args.opt)
         if args.emit_ir:
             print(ir_text)
         else:
@@ -37,6 +43,8 @@ def main() -> int:
         print(f"Compilation error: {error}", file=sys.stderr)
     except StudyLangRuntimeError as error:
         print(f"Runtime error: {error}", file=sys.stderr)
+    except RuntimeError as error:
+        print(f"LLVM error: {error}", file=sys.stderr)
     else:
         return 0
     return 1

@@ -5,9 +5,9 @@ import sys
 import pytest
 from lark.exceptions import UnexpectedInput
 
-from interpreter import Interpreter, StudyLangRuntimeError
-from run import run
-from semantic import SemanticError
+from Interpreter.interpreter import Interpreter, StudyLangRuntimeError
+from Interpreter.run import run
+from Shared.semantic import SemanticError
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -35,7 +35,7 @@ def test_study_session():
         return next(answers)
 
     run(
-        (ROOT / "examples" / "m3_m5_demo.tiny").read_text(),
+        (ROOT / "Examples" / "m3_m5_demo.tiny").read_text(),
         Interpreter(output=output.append, input_fn=answer),
     )
     assert prompts == ["declaration", "loop"]
@@ -44,7 +44,7 @@ def test_study_session():
 
 def test_nested_scopes_through_cli():
     result = subprocess.run(
-        [sys.executable, str(ROOT / "run.py"), str(ROOT / "examples" / "m8_scope.tiny")],
+        [sys.executable, str(ROOT / "Interpreter" / "run.py"), str(ROOT / "Examples" / "m8_scope.tiny")],
         capture_output=True, text=True, timeout=10,
     )
     assert result.returncode == 0, result.stderr
@@ -121,7 +121,7 @@ def test_cli_reports_runtime_error(tmp_path):
     source = tmp_path / "division.tiny"
     source.write_text("show(1 / 0)")
     result = subprocess.run(
-        [sys.executable, str(ROOT / "run.py"), str(source)],
+        [sys.executable, str(ROOT / "Interpreter" / "run.py"), str(source)],
         capture_output=True, text=True, timeout=10,
     )
     assert result.returncode == 1

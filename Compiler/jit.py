@@ -4,8 +4,8 @@ import ctypes
 
 from llvmlite import binding as llvm
 
-from codegen import RUNTIME_ERRORS
-from interpreter import StudyLangRuntimeError
+from Compiler.compiler import RUNTIME_ERRORS
+from Shared.errors import StudyLangRuntimeError
 
 
 _OUTPUT_TYPES = {
@@ -42,12 +42,15 @@ def run_ir(ir_text: str, output=print) -> int:
     with llvm.parse_assembly(ir_text) as module:
         module.verify()
         module.data_layout = str(machine.target_data)
+        functions = {function.name: function for function in module.functions}
         with llvm.create_mcjit_compiler(module, machine) as engine:
             # Bind output per engine and keep callbacks alive until execution ends.
             for name, callback in callbacks.items():
-                engine.add_global_mapping(
-                    module.get_function(name), ctypes.cast(callback, ctypes.c_void_p).value
-                )
+                # Optimization can remove unused output declarations.
+                if name in functions:
+                    engine.add_global_mapping(
+                        functions[name], ctypes.cast(callback, ctypes.c_void_p).value
+                    )
             engine.finalize_object()
             address = engine.get_function_address("main")
             if not address:

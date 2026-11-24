@@ -1,7 +1,7 @@
 """StudyLang AST shape checks, adapted from the instructor's M6 example."""
 import re
 
-from ast_nodes import (
+from Shared.ast_nodes import (
     Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, For, Function,
     If, Index, Let, Not, Number, Program, Return, Show, String, Variable, While,
 )

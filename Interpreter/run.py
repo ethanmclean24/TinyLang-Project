@@ -4,13 +4,16 @@ import argparse
 from pathlib import Path
 import sys
 
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from lark.exceptions import UnexpectedInput
 from lark.indenter import DedentError
 
-from frontend import parse
-from interpreter import Interpreter, StudyLangRuntimeError
-from m6_ast_tool import ASTValidationError, validate_ast
-from semantic import SemanticAnalyzer, SemanticError
+from Shared.frontend import parse
+from Interpreter.interpreter import Interpreter, StudyLangRuntimeError
+from Shared.m6_ast_tool import ASTValidationError, validate_ast
+from Shared.semantic import SemanticAnalyzer, SemanticError
 
 
 def run(source: str, interpreter=None) -> None:

@@ -5,13 +5,13 @@ import sys
 from llvmlite import binding as llvm
 import pytest
 
-from codegen import CompilationError, Compiler
-from compile_run import compile_source
-from frontend import parse
-from interpreter import Interpreter, StudyLangRuntimeError
-from jit import run_ir
-from run import run
-from semantic import SemanticError
+from Compiler.compiler import CompilationError, Compiler
+from Compiler.run import compile_source
+from Shared.frontend import parse
+from Interpreter.interpreter import Interpreter, StudyLangRuntimeError
+from Compiler.jit import run_ir
+from Interpreter.run import run
+from Shared.semantic import SemanticError
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -156,16 +156,16 @@ def test_output_exception_is_propagated_and_stops_native_execution():
 
 
 def test_verified_ir_and_jit_through_cli():
-    sample = ROOT / 'examples' / 'm9_demo.tiny'
+    sample = ROOT / 'Examples' / 'm9_demo.tiny'
     emitted = subprocess.run(
-        [sys.executable, str(ROOT / 'compile_run.py'), str(sample), '--emit-ir'],
+        [sys.executable, str(ROOT / 'Compiler' / 'run.py'), str(sample), '--emit-ir'],
         text=True, capture_output=True, timeout=20,
     )
     assert emitted.returncode == 0, emitted.stderr
     with llvm.parse_assembly(emitted.stdout) as module:
         module.verify()
     executed = subprocess.run(
-        [sys.executable, str(ROOT / 'compile_run.py'), str(sample)],
+        [sys.executable, str(ROOT / 'Compiler' / 'run.py'), str(sample)],
         text=True, capture_output=True, timeout=20,
     )
     assert executed.returncode == 0, executed.stderr
@@ -181,7 +181,7 @@ def test_cli_error_reporting(tmp_path, source, message):
     file = tmp_path / 'invalid.tiny'
     file.write_text(source)
     result = subprocess.run(
-        [sys.executable, str(ROOT / 'compile_run.py'), str(file)],
+        [sys.executable, str(ROOT / 'Compiler' / 'run.py'), str(file)],
         text=True, capture_output=True, timeout=20,
     )
     assert result.returncode == 1

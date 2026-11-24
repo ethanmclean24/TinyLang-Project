@@ -9,10 +9,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from lark import Token, Tree, UnexpectedInput
 from lark.indenter import DedentError
-from ast_nodes import (Array, Ask, Assignment, BinaryOp, Block, Boolean, Call,
+from Shared.ast_nodes import (Array, Ask, Assignment, BinaryOp, Block, Boolean, Call,
                        For, Function, If, Index, Let, Not, Number, Program,
                        Return, Show, String, Variable, While)
-from frontend import ToAST, create_parser, is_valid, parse, parse_tree
+from Shared.frontend import ToAST, create_parser, is_valid, parse, parse_tree
 from test_parser import positive_tests, negative_tests
 
 # M3: at least 3 lexical edge/negative cases (5 below).
@@ -146,7 +146,7 @@ show(add(base(), 2))
                     check(item)
         sources = [source for _, source in positive_tests]
         for name in ["milestone1_examples.tiny", "m3_m5_demo.tiny"]:
-            sources.append((ROOT / "examples" / name).read_text(encoding="utf-8"))
+            sources.append((ROOT / "Examples" / name).read_text(encoding="utf-8"))
         for source in sources:
             with self.subTest(source=source):
                 tree = parse_tree(source)

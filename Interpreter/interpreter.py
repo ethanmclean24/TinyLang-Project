@@ -3,14 +3,11 @@
 from dataclasses import dataclass
 import operator
 
-from ast_nodes import (
+from Shared.ast_nodes import (
     Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, For, Function,
     If, Index, Let, Node, Not, Number, Program, Return, Show, String, Variable, While,
 )
-
-
-class StudyLangRuntimeError(Exception):
-    """Execution encountered an invalid operation."""
+from Shared.errors import StudyLangRuntimeError
 
 
 @dataclass

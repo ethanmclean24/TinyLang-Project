@@ -7,12 +7,12 @@ import math
 
 from llvmlite import binding as llvm, ir
 
-from ast_nodes import (
+from Shared.ast_nodes import (
     Assignment, BinaryOp, Boolean, If, Let, Not, Number, Program, Show,
     Variable, While,
 )
-from m6_ast_tool import validate_ast
-from semantic import SemanticAnalyzer
+from Shared.m6_ast_tool import validate_ast
+from Shared.semantic import SemanticAnalyzer
 
 I1 = ir.IntType(1)
 I32 = ir.IntType(32)

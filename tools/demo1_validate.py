@@ -1,9 +1,15 @@
 """Run the M6 validation, walk, metrics, and precedence demonstration."""
-from ast_nodes import BinaryOp, Number, Program, Show
-from frontend import ROOT, parse, parse_tree
-from m6_ast_tool import validate_ast
-from metric import max_depth, node_count
-from walk import walk
+from pathlib import Path
+import sys
+
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from Shared.ast_nodes import BinaryOp, Number, Program, Show
+from Shared.frontend import ROOT, parse, parse_tree
+from Shared.m6_ast_tool import validate_ast
+from Shared.metric import max_depth, node_count
+from Shared.walk import walk
 
 SOURCE = "show(3 + 5 * 2)\n"
 GROUPED_SOURCE = "show((3 + 5) * 2)\n"
@@ -32,7 +38,7 @@ def main():
     assert grouped.statements[0].expression == BinaryOp("*", BinaryOp("+", Number(3), Number(5)), Number(2))
     assert (node_count(grouped), max_depth(grouped)) == (7, 5)
 
-    source = (ROOT / "examples/m3_m5_demo.tiny").read_text(encoding="utf-8")
+    source = (ROOT / "Examples/m3_m5_demo.tiny").read_text(encoding="utf-8")
     study = inspect_source("STUDY SESSION", source)
     assert (node_count(study), max_depth(study)) == (68, 8)
     print("PASS: structure, precedence, grouping, and study-session regression validated")

@@ -1,4 +1,4 @@
-// StudyLang core grammar; policy and AST mapping: M3_M5_EVIDENCE.md.
+// StudyLang core grammar; policy and AST mapping: ../docs/FRONTEND.md.
 // A compilation unit and every block require at least one statement.
 start: _NEWLINE* statement+
 

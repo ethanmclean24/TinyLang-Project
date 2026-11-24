@@ -1,9 +1,12 @@
 """Check names, scopes, and types in a structurally valid StudyLang AST."""
-
 from dataclasses import dataclass
+from pathlib import Path
+import sys
 from typing import Optional
 
-from ast_nodes import (
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from Shared.ast_nodes import (
     Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, For, Function,
     If, Index, Let, Node, Not, Number, Program, Return, Show, String, Variable, While,
 )
@@ -179,8 +182,8 @@ class SemanticAnalyzer:
 
 
 def run_demo() -> bool:
-    from frontend import parse
-    from m6_ast_tool import validate_ast
+    from Shared.frontend import parse
+    from Shared.m6_ast_tool import validate_ast
 
     cases = [
         ("arithmetic and reassignment", "let score = -1\nscore = score + 2\nshow(score)", True),

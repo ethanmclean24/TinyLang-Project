@@ -1,4 +1,4 @@
-from config import LANGUAGE_NAME, VERSION
+from Shared.config import LANGUAGE_NAME, VERSION
 
 
 def test_identity_is_customized():

@@ -1,0 +1,15 @@
+# Nested scopes, changing outer bindings, and declarations repeated in a loop.
+let score = 1
+if True:
+    let score = 10
+    if True:
+        score = score + 2
+        show(score)
+    show(score)
+show(score)
+let remaining = 2
+while remaining > 0:
+    let bonus = 3
+    score = score + bonus
+    remaining = remaining - 1
+show(score)

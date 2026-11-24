@@ -1,6 +1,6 @@
 """Readable preorder AST walk, adapted from the M6 example."""
-from ast_nodes import BinaryOp, Boolean, Call, For, Function, Let, Number, String, Variable
-from metric import children
+from Shared.ast_nodes import BinaryOp, Boolean, Call, For, Function, Let, Number, String, Variable
+from Shared.metric import children
 
 
 def walk(node, depth=0):

@@ -8,11 +8,11 @@ from lark import UnexpectedInput
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from ast_nodes import BinaryOp, Block, Number, Program, Show, Variable
-from frontend import parse
-from m6_ast_tool import ASTValidationError, validate_ast
-from metric import max_depth, node_count
-from walk import walk
+from Shared.ast_nodes import BinaryOp, Block, Number, Program, Show, Variable
+from Shared.frontend import parse
+from Shared.m6_ast_tool import ASTValidationError, validate_ast
+from Shared.metric import max_depth, node_count
+from Shared.walk import walk
 
 
 def test_precedence():
@@ -59,7 +59,7 @@ def test_malformed_nodes_rejected(node):
 
 @pytest.mark.parametrize("filename", ["milestone1_examples.tiny", "m3_m5_demo.tiny"])
 def test_existing_examples_validate(filename):
-    source = (ROOT / "examples" / filename).read_text(encoding="utf-8")
+    source = (ROOT / "Examples" / filename).read_text(encoding="utf-8")
     validate_ast(parse(source))
 
 
@@ -72,5 +72,5 @@ def test_ast_walk(capsys):
 
 
 def test_semantic_checks_remain_outside_m6():
-    # Undeclared names, operand types, and return context belong to future milestones.
+    # Undeclared names, operand types, and return context are checked by semantic analysis.
     validate_ast(parse('show(missing + "text")\nreturn 1\n'))

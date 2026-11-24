@@ -1,5 +1,5 @@
 """AST metrics adapted from the M6 example; root depth is 1."""
-from ast_nodes import (
+from Shared.ast_nodes import (
     Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, For, Function,
     If, Index, Let, Not, Number, Program, Return, Show, String, Variable, While,
 )

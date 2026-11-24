@@ -2,9 +2,9 @@ from pathlib import Path
 
 import pytest
 
-from frontend import parse
-from m6_ast_tool import validate_ast
-from semantic import SemanticAnalyzer, SemanticError
+from Shared.frontend import parse
+from Shared.m6_ast_tool import validate_ast
+from Shared.semantic import SemanticAnalyzer, SemanticError
 
 
 def analyze(source):
@@ -14,7 +14,7 @@ def analyze(source):
 
 
 def test_study_session_example():
-    example = Path(__file__).resolve().parents[1] / "examples" / "m3_m5_demo.tiny"
+    example = Path(__file__).resolve().parents[1] / "Examples" / "m3_m5_demo.tiny"
     analyze(example.read_text(encoding="utf-8"))
 
 
