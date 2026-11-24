@@ -1,4 +1,4 @@
-# Language and shared frontend — M0–M7
+# Language and shared frontend
 
 ## Language identity and M0–M2 continuity
 StudyLang (Ethan McLean, version 0.1) is a beginner-friendly console study language.
@@ -54,7 +54,8 @@ terminals allowed in the parser state, including subtraction versus a negative l
 | SH_COMMENT | # through end of line | # study | Ignored or absorbed into _NEWLINE; no AST node |
 
 Precedence, strongest to weakest: grouped/atomic expressions, multiplication/
-division/remainder, addition/subtraction, one comparison, not, and, or.
+division/remainder, addition/subtraction, one comparison, not, and, or,
+conditional expressions.
 Blocks require exactly four additional spaces; the first statement starts in
 column one. Parentheses/brackets suppress indentation processing while open.
 
@@ -136,5 +137,18 @@ Function parameters, call results, and array elements may have unknown types
 during analysis. Operations involving these values receive concrete type
 checks during interpretation. Calling a function that finishes without a
 return value raises a runtime error.
+
+## M11 conditional expressions
+
+`then_expression if condition else else_expression` uses the existing `if`
+and `else` tokens and produces a `Shared.ast_nodes.Conditional` node. It can
+appear anywhere an expression is accepted. Its condition requires a Boolean,
+and known alternative types must match. Either unknown alternative makes
+the result type unknown during analysis. Only the selected alternative runs.
+
+The expression has lower precedence than `or`, and its else alternative
+can contain another conditional without parentheses. Conditional expressions
+inside the condition or then alternative use parentheses. The specification,
+functional-style comparison, and examples are in [M11_EVIDENCE.md](M11_EVIDENCE.md).
 
 Current commands and verification results are in [TESTING.md](TESTING.md).

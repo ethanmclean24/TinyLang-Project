@@ -16,6 +16,7 @@ Verification commands and current results are maintained in
 | `Number`, `Boolean`, `String` | Produce literal values |
 | `Variable` | Look up the closest visible binding |
 | `BinaryOp`, `Not` | Arithmetic, comparisons, and Boolean operations with short-circuiting |
+| `Conditional` (M11) | Evaluate the Boolean condition and the selected alternative |
 | `Array`, `Index` | Build arrays and read checked indices, including nested indices |
 | `Ask` | Evaluate the prompt and read a line of input |
 | `Call` | Evaluate arguments and execute a function in its lexical scope |

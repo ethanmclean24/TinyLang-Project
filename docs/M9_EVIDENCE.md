@@ -26,6 +26,7 @@ creates a native target machine and MCJIT engine, and calls its `main`.
 | Mixed integer/float comparisons | Checked float-to-integer comparison that preserves large integer precision |
 | `not` | Boolean inversion |
 | `and`, `or` | Conditional branches and a `phi` value at the merge |
+| Conditional expressions (M11) | Branches and a `phi` value for matching numeric or Boolean alternatives |
 | `show` | Typed host output call, with checked output status |
 | `if`/`else` | Then, else, and merge blocks |
 | `while` | Test, body, and exit blocks, plus a loop counter |

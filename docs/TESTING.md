@@ -10,9 +10,9 @@ python3 -m pip install -r requirements.txt
 python3 -m pytest -q
 ```
 
-The latest verification passed **266 tests and 47 subtests** on Python 3.12
+The latest verification passed **350 tests and 47 subtests** on Python 3.12
 with Lark 1.3.1, llvmlite 0.50.0, and LLVM 22.1.0 on Apple Silicon macOS.
-The suite includes the M0–M9 regressions and M10 integration tests. Current
+The suite includes the M0–M10 regressions and M11 conditional-expression tests. Current
 verification results are recorded here so milestone documents can focus on
 their implementation and evidence.
 
@@ -29,6 +29,7 @@ python3 -m Shared.semantic
 python3 -m pytest -q tests/test_interpreter.py
 python3 -m pytest -q tests/test_codegen.py
 python3 -m pytest -q tests/test_integration.py
+python3 -m pytest -q tests/test_conditional.py
 ```
 
 `Shared.frontend` prints source, parse tree, and AST. Token inspection prints

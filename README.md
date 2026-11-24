@@ -4,7 +4,7 @@
 
 **Author** Ethan McLean
 
-**Current milestone** M10 — Integration, Testing, and Debugging
+**Current milestone** M11 — Conditional Expressions
 
 A simple language with easy inputs and outputs that makes it easy for students
 to add course materials, such as terms or questions, and study using console
@@ -81,6 +81,7 @@ See [the architecture](docs/ARCHITECTURE.md) for the integration diagram.
 | Numbers, Booleans, variables, and assignment | Supported | Supported |
 | Arithmetic, comparison, and logical operators | Supported | Supported |
 | `show`, `if`/`else`, and `while` | Supported | Supported |
+| Conditional expressions | Supported | Numeric and Boolean alternatives |
 | Strings and `ask` | Supported | Compilation error |
 | Mixed/nested arrays, indexing, and `for` | Supported | Compilation error |
 | Functions, recursion, and captured scopes | Supported | Compilation error |
@@ -93,8 +94,28 @@ integer limits and host JIT dependencies also apply. The detailed boundaries
 and reasoning are in [the compiler notes](docs/M9_EVIDENCE.md#backend-limitations).
 
 M0–M7 language/frontend/validation work, the M8 interpreter, M9 compiler subset,
-and M10 integration and optimization are implemented. M11–M12 extensions are
-upcoming milestones.
+M10 integration and optimization, and M11 conditional expressions are
+implemented. M12 is the upcoming milestone.
+
+## Conditional expressions
+
+Choose a value directly inside an expression:
+
+```text
+let correct = True
+let points = 1 if correct else 0
+show(points)
+```
+
+The condition requires a Boolean and only the selected alternative executes.
+Known alternative types must match. Conditional expressions have lower
+precedence than `or`, and nesting in the `else` alternative associates to the
+right. See [the M11 notes](docs/M11_EVIDENCE.md) for the full rules and examples.
+
+```sh
+python3 main.py --mode compiler --file Examples/m11_numeric.tiny --opt 2
+python3 main.py --mode interpreter --file Examples/m11_study.tiny
+```
 
 ## Testing and documentation
 
@@ -107,4 +128,5 @@ Run the full suite with `python3 -m pytest -q`.
 | [M8_EVIDENCE.md](docs/M8_EVIDENCE.md) | Runtime scopes, function capture, and source/output traces |
 | [M9_EVIDENCE.md](docs/M9_EVIDENCE.md) | LLVM mappings, annotated IR, and compiler limitations with reasoning |
 | [M10_EVIDENCE.md](docs/M10_EVIDENCE.md) | Both-mode comparison matrix and optimization evidence |
+| [M11_EVIDENCE.md](docs/M11_EVIDENCE.md) | Conditional expression specification, examples, tests, and trade-offs |
 | [TESTING.md](docs/TESTING.md) | Verification commands, current results, and troubleshooting |
