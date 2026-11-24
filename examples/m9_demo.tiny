@@ -1,0 +1,13 @@
+# Track a short practice session using the LLVM-supported core.
+let correct = 0
+let remaining = 3
+while remaining > 0:
+    let points = 2
+    correct = correct + points
+    remaining = remaining - 1
+if correct >= 6 and not False:
+    show(correct)
+else:
+    show(0)
+show(correct / 3)
+show(correct == 6)
