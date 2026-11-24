@@ -1,7 +1,7 @@
 # StudyLang
 **Version:** 0.1  
 **Author:** Ethan McLean  
-**Current Milestone:** M8 — Interpreter
+**Current Milestone:** M9 — LLVM IR Generation
 
 ## 1. Language Purpose
 A simple language with easy inputs and outputs that makes it easy for students to add course materials (like terms or questions) and study using simple console input/output.
@@ -71,10 +71,10 @@ See `examples/milestone1_examples.tiny`.
 - [x] AST structural validation, walk, and metrics — M6
 - [x] Semantic analysis
 - [x] Interpreter — M8
-- [ ] LLVM backend/JIT — later
+- [x] LLVM backend/JIT — M9 numeric and Boolean subset
 
 ## 12. Setup and verification
-Use Python 3.9 or newer. From the project root:
+Use Python 3.10 or newer for the LLVM dependency. From the project root:
 
 ```sh
 python3 -m pip install -r requirements.txt
@@ -147,3 +147,57 @@ executes the program. Errors go to stderr and give the command exit status 1.
   instructor example.
 
 See [M8_EVIDENCE.md](M8_EVIDENCE.md) for the supported AST nodes and execution traces.
+
+## 15. Compiling StudyLang with LLVM
+
+```sh
+python3 compile_run.py examples/m9_demo.tiny
+python3 compile_run.py examples/m9_demo.tiny --emit-ir
+```
+
+The first command compiles the source, verifies its LLVM IR, and executes
+native code with MCJIT. It prints `6`, `2.0`, and `true` on separate lines.
+The second command prints the verified IR for inspection. Both commands run
+AST validation and semantic analysis before generating IR.
+
+The compiler supports numbers, Booleans, variables, declaration and assignment,
+arithmetic, comparisons, logical operators, `show`, `if`/`else`, and `while`.
+It preserves lexical scopes, shadowing, outer assignment, short-circuiting,
+and the interpreter's output format and while-loop limit.
+
+This compiler subset is a deliberate project scope decision. It follows the
+instructor's numeric and Boolean example and demonstrates LLVM types, storage,
+control flow, and native execution. The M9 guide permits a supported subset
+with explicit errors and documented limitations. StudyLang's mixed-type
+collections and untyped functions would require a substantially larger runtime
+for value representation, memory management, and captured environments.
+The interpreter provides execution for the full language through `run.py`.
+
+- Strings, `ask`, arrays/indexing, `for`, and user-defined functions/returns
+  raise a compilation error. The compiler checks the whole program, including
+  branches that would be skipped during execution.
+- Integers use signed 64-bit storage. Literals outside that range are rejected,
+  and integer arithmetic overflow raises a runtime error. Floating-point values
+  use LLVM `double`. The frontend's existing float-based literal parsing applies.
+- Zero divisors raise runtime errors. Negative remainders follow StudyLang's
+  interpreter behavior, including `-8 % 3 == 1`.
+- Generated IR calls small host output functions supplied by `jit.run_ir`.
+  Arithmetic and control flow execute as native code. Host functions format
+  and deliver the output, preserving values such as `2.0` in the display.
+  Execution requires the Python JIT runner on the current host. Standalone
+  executable generation and cross-compilation are outside this backend's scope.
+
+The detailed reasons for each limitation are in the backend limitations
+section of [M9_EVIDENCE.md](M9_EVIDENCE.md).
+
+The `llvmlite` dependency is listed in `requirements.txt`. Tested with Python
+3.12, llvmlite 0.50.0, and LLVM 22.1.0 on this Apple Silicon Mac. Official
+llvmlite binary wheels include their LLVM runtime.
+[llvmlite installation documentation](https://llvmlite.readthedocs.io/en/v0.50.0/admin-guide/install.html)
+
+`Compiler().compile(program)` in `codegen.py` returns verified LLVM IR.
+`compile_source(source)` in `compile_run.py` provides a source-text wrapper.
+`run_ir(ir_text, output=print)` in `jit.py` executes compiler-produced IR,
+returns zero on success, and raises `StudyLangRuntimeError` for runtime failures.
+See [M9_EVIDENCE.md](M9_EVIDENCE.md) for the AST/type mappings, generated IR,
+execution results, and instructor comparison.
