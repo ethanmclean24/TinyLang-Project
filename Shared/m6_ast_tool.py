@@ -2,11 +2,11 @@
 import re
 
 from Shared.ast_nodes import (
-    Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, For, Function,
+    Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, Conditional, For, Function,
     If, Index, Let, Not, Number, Program, Return, Show, String, Variable, While,
 )
 
-EXPRESSIONS = (Number, String, Boolean, Variable, BinaryOp, Not, Ask, Call, Array, Index)
+EXPRESSIONS = (Number, String, Boolean, Variable, BinaryOp, Not, Conditional, Ask, Call, Array, Index)
 STATEMENTS = (Let, Assignment, Show, If, While, For, Function, Return)
 OPERATORS = {"+", "-", "*", "/", "%", "==", "!=", "<", ">", "<=", ">=", "and", "or"}
 KEYWORDS = {"let", "show", "ask", "if", "else", "while", "for", "in", "function",
@@ -64,6 +64,10 @@ def _validate(node, path):
         _child(node.right, EXPRESSIONS, path + ".right")
     elif kind is Not:
         _child(node.operand, EXPRESSIONS, path + ".operand")
+    elif kind is Conditional:
+        _child(node.condition, EXPRESSIONS, path + ".condition")
+        _child(node.then_expression, EXPRESSIONS, path + ".then_expression")
+        _child(node.else_expression, EXPRESSIONS, path + ".else_expression")
     elif kind is Let:
         _identifier(node.name, path + ".name")
         _child(node.value, EXPRESSIONS, path + ".value")

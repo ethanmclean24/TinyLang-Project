@@ -8,7 +8,7 @@ import math
 from llvmlite import binding as llvm, ir
 
 from Shared.ast_nodes import (
-    Assignment, BinaryOp, Boolean, If, Let, Not, Number, Program, Show,
+    Assignment, BinaryOp, Boolean, Conditional, If, Let, Not, Number, Program, Show,
     Variable, While,
 )
 from Shared.m6_ast_tool import validate_ast
@@ -112,7 +112,33 @@ class Compiler:
             return self.builder.not_(self._expression(node.operand), name="logical_not")
         if isinstance(node, BinaryOp):
             return self._binary(node)
+        if isinstance(node, Conditional):
+            return self._conditional(node)
         raise CompilationError(f"LLVM backend does not support expression: {type(node).__name__}")
+
+    def _conditional(self, node):
+        condition = self._expression(node.condition)
+        then_block = self.function.append_basic_block("conditional_then")
+        else_block = self.function.append_basic_block("conditional_else")
+        merge = self.function.append_basic_block("conditional_merge")
+        self.builder.cbranch(condition, then_block, else_block)
+
+        self.builder.position_at_end(then_block)
+        then_value = self._expression(node.then_expression)
+        then_end = self.builder.block
+        self.builder.branch(merge)
+
+        self.builder.position_at_end(else_block)
+        else_value = self._expression(node.else_expression)
+        else_end = self.builder.block
+        self.builder.branch(merge)
+
+        # The phi selects a value from the branch that actually executed.
+        self.builder.position_at_end(merge)
+        result = self.builder.phi(then_value.type, name="conditional_result")
+        result.add_incoming(then_value, then_end)
+        result.add_incoming(else_value, else_end)
+        return result
 
     def _binary(self, node):
         op = node.op

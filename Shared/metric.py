@@ -1,6 +1,6 @@
 """AST metrics adapted from the M6 example; root depth is 1."""
 from Shared.ast_nodes import (
-    Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, For, Function,
+    Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, Conditional, For, Function,
     If, Index, Let, Not, Number, Program, Return, Show, String, Variable, While,
 )
 
@@ -16,6 +16,8 @@ def children(node):
         return (node.left, node.right)
     if kind is Not:
         return (node.operand,)
+    if kind is Conditional:
+        return (node.then_expression, node.condition, node.else_expression)
     if kind is Let:
         return (node.value,)
     if kind is Assignment:

@@ -7,7 +7,7 @@ from typing import Optional
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from Shared.ast_nodes import (
-    Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, For, Function,
+    Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, Conditional, For, Function,
     If, Index, Let, Node, Not, Number, Program, Return, Show, String, Variable, While,
 )
 
@@ -119,6 +119,18 @@ class SemanticAnalyzer:
         if isinstance(node, Not):
             self._require_type(self._check_expression(node.operand), {"boolean"}, "'not' operand")
             return "boolean"
+        if isinstance(node, Conditional):
+            self._require_type(self._check_expression(node.condition), {"boolean"}, "Conditional condition")
+            # Check both alternatives statically, even though only one will run.
+            then_type = self._check_expression(node.then_expression)
+            else_type = self._check_expression(node.else_expression)
+            if UNKNOWN in (then_type, else_type):
+                return UNKNOWN
+            if then_type != else_type:
+                raise SemanticError(
+                    f"Conditional alternatives require matching types, got {then_type} and {else_type}"
+                )
+            return then_type
         if isinstance(node, Ask):
             self._check_expression(node.prompt)
             return "string"

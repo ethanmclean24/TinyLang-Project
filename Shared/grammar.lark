@@ -26,7 +26,8 @@ while_stmt: "while" expression ":" block
 for_stmt: "for" NAME "in" expression ":" block
 block: _NEWLINE _INDENT statement+ _DEDENT
 
-?expression: or_expr
+?expression: or_expr "if" or_expr "else" expression -> conditional
+           | or_expr
 ?or_expr: or_expr "or" and_expr -> logical_or
         | and_expr
 ?and_expr: and_expr "and" not_expr -> logical_and

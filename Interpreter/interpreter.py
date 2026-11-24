@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import operator
 
 from Shared.ast_nodes import (
-    Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, For, Function,
+    Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, Conditional, For, Function,
     If, Index, Let, Node, Not, Number, Program, Return, Show, String, Variable, While,
 )
 from Shared.errors import StudyLangRuntimeError
@@ -181,6 +181,10 @@ class Interpreter:
             return self._evaluate_binary(node, environment)
         if isinstance(node, Not):
             return not self._condition(node.operand, environment, "'not' operand")
+        if isinstance(node, Conditional):
+            condition = self._condition(node.condition, environment, "Conditional condition")
+            selected = node.then_expression if condition else node.else_expression
+            return self._evaluate(selected, environment)
         if isinstance(node, Ask):
             prompt = _display(self._evaluate(node.prompt, environment))
             try:

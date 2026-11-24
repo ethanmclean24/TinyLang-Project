@@ -14,7 +14,7 @@ from lark import Lark, Transformer, UnexpectedInput
 from lark.indenter import DedentError, PythonIndenter
 
 from Shared.ast_nodes import (
-    Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, For, Function,
+    Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, Conditional, For, Function,
     If, Index, Let, Not, Number, Program, Return, Show, String, Variable, While,
 )
 
@@ -106,6 +106,10 @@ class ToAST(Transformer):
 
     def logical_not(self, items):
         return Not(items[0])
+
+    def conditional(self, items):
+        then_expression, condition, else_expression = items
+        return Conditional(condition, then_expression, else_expression)
 
     def declaration(self, items):
         return Let(str(items[0]), items[1])

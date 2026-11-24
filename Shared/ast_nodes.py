@@ -45,6 +45,13 @@ class Not(Node):
 
 
 @dataclass
+class Conditional(Node):
+    condition: Node
+    then_expression: Node
+    else_expression: Node
+
+
+@dataclass
 class Let(Node):
     name: str
     value: Node
