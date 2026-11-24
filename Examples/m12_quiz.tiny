@@ -1,0 +1,14 @@
+# Accept multiple answers and calculate the total from the question array.
+let questions = ["What declares a variable? ", "What repeats while a condition is true? "]
+let accepted = [["let", "variable declaration"], ["while", "while loop"]]
+let correct = 0
+let index = 0
+for question in questions:
+    let answer = ask(question)
+    let matched = contains(accepted[index], answer)
+    show("Correct!" if matched else "Review this topic")
+    correct = correct + (1 if matched else 0)
+    index = index + 1
+show(correct)
+show(len(questions))
+show(correct * 100 / len(questions))
