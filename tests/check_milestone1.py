@@ -4,15 +4,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 required_files = [
-    "config.py", "main.py", "README.md", "ARCHITECTURE.md",
-    "examples/milestone1_examples.tiny", "grammar.lark", "frontend.py",
-    "ast_nodes.py", "semantic.py", "interpreter.py", "codegen.py", "jit.py",
+    "Shared/config.py", "main.py", "README.md", "docs/ARCHITECTURE.md",
+    "Examples/milestone1_examples.tiny", "Shared/grammar.lark", "Shared/frontend.py",
+    "Shared/ast_nodes.py", "Shared/semantic.py", "Interpreter/interpreter.py",
+    "Compiler/compiler.py", "Compiler/jit.py",
 ]
 
 editable_week2 = [
     ("README.md", "README specification"),
-    ("ARCHITECTURE.md", "architecture"),
-    ("examples/milestone1_examples.tiny", "informal examples"),
+    ("docs/ARCHITECTURE.md", "architecture"),
+    ("Examples/milestone1_examples.tiny", "informal examples"),
 ]
 
 print("TinyLang Milestone 1 readiness check")
@@ -42,4 +43,4 @@ else:
     print("Complete the items marked [CHECK] before submission.")
 
 print("This script checks package readiness only; it does NOT grade design quality.")
-print("Review START_HERE.md, the Guided Development Workbook, and Moodle before submitting.")
+print("Review README.md, docs/TESTING.md, and the instructor guide before submitting.")
