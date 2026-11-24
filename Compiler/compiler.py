@@ -8,11 +8,12 @@ import math
 from llvmlite import binding as llvm, ir
 
 from Shared.ast_nodes import (
-    Assignment, BinaryOp, Boolean, Conditional, If, Let, Not, Number, Program, Show,
+    Assignment, BinaryOp, Boolean, Call, Conditional, If, Let, Not, Number, Program, Show,
     Variable, While,
 )
 from Shared.m6_ast_tool import validate_ast
 from Shared.semantic import SemanticAnalyzer
+from Shared.builtins import BUILTINS
 
 I1 = ir.IntType(1)
 I32 = ir.IntType(32)
@@ -114,6 +115,10 @@ class Compiler:
             return self._binary(node)
         if isinstance(node, Conditional):
             return self._conditional(node)
+        if isinstance(node, Call) and node.name in BUILTINS:
+            raise CompilationError(
+                f"LLVM backend does not support builtin '{node.name}'; use interpreter mode"
+            )
         raise CompilationError(f"LLVM backend does not support expression: {type(node).__name__}")
 
     def _conditional(self, node):

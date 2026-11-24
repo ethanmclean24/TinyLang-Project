@@ -8,6 +8,7 @@ from Shared.ast_nodes import (
     If, Index, Let, Node, Not, Number, Program, Return, Show, String, Variable, While,
 )
 from Shared.errors import StudyLangRuntimeError
+from Shared.builtins import BUILTINS, Builtin
 
 
 @dataclass
@@ -63,7 +64,7 @@ class _ReturnSignal(Exception):
 
 _TYPE_NAMES = {
     int: "integer", float: "float", bool: "boolean", str: "string",
-    list: "array", FunctionValue: "function",
+    list: "array", FunctionValue: "function", Builtin: "function",
 }
 _NUMBERS = (int, float)
 _NUMERIC_OPERATORS = {
@@ -117,7 +118,10 @@ class Interpreter:
 
     def execute(self, program: Program) -> None:
         """Run a validated AST with fresh global bindings."""
-        environment = Environment()
+        builtins = Environment()
+        for name, function in BUILTINS.items():
+            builtins.define(name, function)
+        environment = Environment(builtins)
         try:
             for statement in program.statements:
                 self._execute_statement(statement, environment)
@@ -212,6 +216,13 @@ class Interpreter:
 
     def _call(self, node: Call, environment: Environment):
         function = environment.lookup(node.name)
+        if isinstance(function, Builtin):
+            arguments = [self._evaluate(argument, environment) for argument in node.arguments]
+            items = _require_type(arguments[0], (list,), f"First argument of '{function.name}'")
+            if function.name == "len":
+                return len(items)
+            # Use the same type-aware, cycle-safe comparison as array equality.
+            return any(_equal(item, arguments[1]) for item in items)
         local = Environment(function.closure)
         for name, argument in zip(function.declaration.parameters, node.arguments):
             local.define(name, self._evaluate(argument, environment))

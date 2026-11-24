@@ -10,6 +10,7 @@ from Shared.ast_nodes import (
     Array, Ask, Assignment, BinaryOp, Block, Boolean, Call, Conditional, For, Function,
     If, Index, Let, Node, Not, Number, Program, Return, Show, String, Variable, While,
 )
+from Shared.builtins import BUILTINS
 
 NUMERIC = {"integer", "float"}
 UNKNOWN = "unknown"
@@ -23,6 +24,7 @@ class SemanticError(Exception):
 class Symbol:
     value_type: str
     arity: Optional[int] = None
+    builtin: bool = False
 
 
 class SemanticAnalyzer:
@@ -31,8 +33,12 @@ class SemanticAnalyzer:
         self.function_depth = 0
 
     def analyze(self, program: Program) -> Program:
-        # Each program starts with an empty global scope.
-        self.scopes = [{}]
+        # Builtins live outside the global scope so ordinary declarations can shadow them.
+        builtins = {
+            name: Symbol(spec.result_type, spec.arity, builtin=True)
+            for name, spec in BUILTINS.items()
+        }
+        self.scopes = [builtins, {}]
         self.function_depth = 0
         for statement in program.statements:
             self._check_statement(statement)
@@ -150,8 +156,10 @@ class SemanticAnalyzer:
                     f"Function '{node.name}' expects {symbol.arity} arguments, "
                     f"got {len(node.arguments)}"
                 )
-            for argument in node.arguments:
-                self._check_expression(argument)
+            argument_types = [self._check_expression(argument) for argument in node.arguments]
+            if symbol.builtin:
+                self._require_type(argument_types[0], {"array"}, f"First argument of '{node.name}'")
+                return symbol.value_type
             return UNKNOWN
         raise SemanticError(f"Unsupported expression: {type(node).__name__}")
 
