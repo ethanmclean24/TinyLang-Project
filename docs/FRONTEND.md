@@ -123,7 +123,8 @@ parsing to print the actual contextual tokens and indentation markers.
 
 `Shared.semantic.SemanticAnalyzer().analyze(program)` returns the same AST on
 success or raises `SemanticError` for a violation. Variables and functions
-share a namespace and must be declared before use. Branches, loops, and
+share a namespace. User-defined names must be declared before use; M12 adds
+predefined `len` and `contains` functions. Branches, loops, and
 functions have local scopes. Inner names can shadow outer names, and a
 function's body can call itself.
 
@@ -150,5 +151,18 @@ The expression has lower precedence than `or`, and its else alternative
 can contain another conditional without parentheses. Conditional expressions
 inside the condition or then alternative use parentheses. The specification,
 functional-style comparison, and examples are in [M11_EVIDENCE.md](M11_EVIDENCE.md).
+
+## M12 collection queries
+
+`len(array)` returns an integer and `contains(array, value)` returns a Boolean.
+The existing function-call grammar and `Call` AST represent both queries.
+Their signatures are defined in `Shared.builtins.BUILTINS` and used to seed
+a predefined scope outside the global scope. User declarations can shadow
+the names, and calls are checked according to the resolved symbol.
+
+Semantic analysis checks argument counts and known first-argument types.
+Unknown first-argument types receive a runtime array check. User functions
+keep their existing untyped parameters and unknown return types. Query
+semantics and implementation details are in [M12_EVIDENCE.md](M12_EVIDENCE.md).
 
 Current commands and verification results are in [TESTING.md](TESTING.md).

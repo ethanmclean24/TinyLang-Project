@@ -4,6 +4,8 @@
 Both paths use `Shared/grammar.lark`, `Shared/ast_nodes.py`,
 `Shared/frontend.py`, `Shared/m6_ast_tool.py`, and `Shared/semantic.py`.
 Shared runtime failures use `Shared.errors.StudyLangRuntimeError`.
+`Shared.builtins` defines the array-query signatures used by semantic analysis
+and the interpreter's predefined environment.
 
 ```mermaid
 flowchart TD

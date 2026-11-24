@@ -20,6 +20,7 @@ Verification commands and current results are maintained in
 | `Array`, `Index` | Build arrays and read checked indices, including nested indices |
 | `Ask` | Evaluate the prompt and read a line of input |
 | `Call` | Evaluate arguments and execute a function in its lexical scope |
+| Built-in `Call` (M12) | Query array length or membership through a resolved predefined function |
 | `Let`, `Assignment` | Declare a local value or update an existing binding or array slot |
 | `Show` | Print the evaluated value |
 | `If`, `While`, `For` | Select a branch or repeat a body, using a fresh scope for each block execution |

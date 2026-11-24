@@ -4,7 +4,7 @@
 
 **Author** Ethan McLean
 
-**Current milestone** M11 — Conditional Expressions
+**Current milestone** M12 — Built-in Collection Queries
 
 A simple language with easy inputs and outputs that makes it easy for students
 to add course materials, such as terms or questions, and study using console
@@ -84,6 +84,7 @@ See [the architecture](docs/ARCHITECTURE.md) for the integration diagram.
 | Conditional expressions | Supported | Numeric and Boolean alternatives |
 | Strings and `ask` | Supported | Compilation error |
 | Mixed/nested arrays, indexing, and `for` | Supported | Compilation error |
+| `len(array)` and `contains(array, value)` | Supported | Compilation error |
 | Functions, recursion, and captured scopes | Supported | Compilation error |
 
 The compiler's numeric and Boolean subset is a deliberate scope decision,
@@ -94,8 +95,8 @@ integer limits and host JIT dependencies also apply. The detailed boundaries
 and reasoning are in [the compiler notes](docs/M9_EVIDENCE.md#backend-limitations).
 
 M0–M7 language/frontend/validation work, the M8 interpreter, M9 compiler subset,
-M10 integration and optimization, and M11 conditional expressions are
-implemented. M12 is the upcoming milestone.
+M10 integration and optimization, M11 conditional expressions, and M12
+built-in collection queries are implemented.
 
 ## Conditional expressions
 
@@ -117,6 +118,32 @@ python3 main.py --mode compiler --file Examples/m11_numeric.tiny --opt 2
 python3 main.py --mode interpreter --file Examples/m11_study.tiny
 ```
 
+## Built-in collection queries
+
+`len(array)` counts top-level elements. `contains(array, value)` returns a
+Boolean indicating whether an element matches the value. These array-only
+functions let quizzes calculate their total and accept multiple correct answers.
+
+```text
+let accepted = ["let", "variable declaration"]
+let answer = ask("What declares a variable? ")
+show("Correct!" if contains(accepted, answer) else "Review this topic")
+show(len(accepted))
+```
+
+The names are predefined functions that follow lexical shadowing rules.
+Known non-array arguments and incorrect argument counts are semantic errors;
+unknown argument types are checked at runtime. String matching is exact and
+case-sensitive. The compiler reports an interpreter-only diagnostic for
+these queries.
+
+```sh
+python3 main.py --mode interpreter --file Examples/m12_quiz.tiny
+```
+
+See [the M12 notes](docs/M12_EVIDENCE.md) for query semantics, the complete
+quiz example, implementation decisions, and remaining limitations.
+
 ## Testing and documentation
 
 Run the full suite with `python3 -m pytest -q`.
@@ -129,4 +156,5 @@ Run the full suite with `python3 -m pytest -q`.
 | [M9_EVIDENCE.md](docs/M9_EVIDENCE.md) | LLVM mappings, annotated IR, and compiler limitations with reasoning |
 | [M10_EVIDENCE.md](docs/M10_EVIDENCE.md) | Both-mode comparison matrix and optimization evidence |
 | [M11_EVIDENCE.md](docs/M11_EVIDENCE.md) | Conditional expression specification, examples, tests, and trade-offs |
+| [M12_EVIDENCE.md](docs/M12_EVIDENCE.md) | Built-in collection queries, quiz demonstration, review, and final limitations |
 | [TESTING.md](docs/TESTING.md) | Verification commands, current results, and troubleshooting |
