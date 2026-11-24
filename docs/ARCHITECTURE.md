@@ -65,3 +65,24 @@ project goals of straightforward execution and inspectable code generation.
 The LLVM path adds native execution and optimization at the cost of more
 complex code generation and runtime support. Its documented subset keeps
 that work manageable while the interpreter supports the full language.
+
+## Implementation reflection
+
+Lexical scoping required agreement between static name resolution and runtime
+lookup. Capturing visible names with shared `Binding` objects lets functions
+observe later assignments while preserving the declaration each name referred
+to when the function was defined. The M8 scope trace and regression tests
+exercise that distinction.
+
+LLVM's native representations required explicit decisions about overflow,
+negative remainders, floating-point display, and short-circuit evaluation.
+Checked arithmetic, sign correction, typed output callbacks, and branch/phi
+generation preserve the intended behavior within the compiler subset. The
+O0–O3 comparisons verify the observable effects after optimization.
+
+The final extensions connect these stages to the language's study-session
+purpose. Conditional expressions compose values through existing operators
+and function results. Collection queries reuse the call representation and
+array equality logic so a quiz can accept alternative answers and derive
+its score from its data. Keeping these definitions shared gives the extensions
+one semantic model and a documented execution-mode boundary.

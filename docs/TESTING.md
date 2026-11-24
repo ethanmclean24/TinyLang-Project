@@ -56,6 +56,28 @@ directory using absolute source paths, and exercise the interactive launcher.
 The [M10 comparison matrix](M10_EVIDENCE.md#comparison-matrix) records expected
 and actual behavior for both execution modes.
 
+## Final source-package verification
+
+The final checklist audit copied the project to a clean temporary directory,
+excluding Git metadata, caches, and local virtual environments. It used the
+installed dependency environment listed above, with `PYTHONPATH` cleared.
+The copied frontend's import path was checked to confirm it loaded from that
+copy. The full suite passed 388 tests and 47 subtests there.
+
+All seven runnable interpreter examples matched their expected output,
+including scripted input for the study sessions. The three shared examples
+(`m9_demo.tiny`, `m10_scope.tiny`, and `m11_numeric.tiny`) also matched in
+compiler mode at O2. Standalone runners worked from a different working
+directory, and the optimized IR emission command produced verified LLVM IR.
+Earlier milestone demonstrations and the interactive menu passed as well.
+
+The M1 design sketches remain available for syntax/AST inspection and are
+labelled accordingly in the example menu. Their mixed string/number additions
+are outside the language's semantic rules, as documented in the README.
+
+Stored source/AST/IR excerpts in the M9–M11 notes were compared against
+current generated results. Local Markdown links and heading anchors resolved.
+
 ## Troubleshooting
 
 | Symptom | Explanation and action |

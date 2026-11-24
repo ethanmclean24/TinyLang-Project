@@ -21,6 +21,13 @@ python3 -m pip install -r requirements.txt
 python3 main.py
 ```
 
+`requirements.txt` specifies Lark 1.3.1, pytest 7 or newer, and llvmlite
+0.47 through 0.50. Lark supplies the parser; llvmlite supplies LLVM code
+generation, optimization, and MCJIT. Official llvmlite binary wheels include
+the required LLVM runtime. The verified environment is Python 3.12 with
+llvmlite 0.50.0 and LLVM 22.1.0 on Apple Silicon macOS. Verification details
+are maintained in [TESTING.md](docs/TESTING.md).
+
 The launcher offers interpreter or compiler mode, a numbered example list,
 and custom file paths. Use `B` in the file chooser to return to mode selection
 or `Q` at mode selection to exit. Compiler mode also offers optimization and
@@ -74,7 +81,28 @@ Both modes use one shared frontend and AST. Python imports use package names
 such as `Shared.frontend`, `Interpreter.run`, and `Compiler.compiler`.
 See [the architecture](docs/ARCHITECTURE.md) for the integration diagram.
 
+## Example programs
+
+| File in `Examples/` | Execution mode | Demonstrates |
+| --- | --- | --- |
+| `m3_m5_demo.tiny` | Interpreter | Study prompts, arrays, loops, functions, and scoring; try `yes`, then `no` |
+| `m8_scope.tiny` | Interpreter | Nested scope, captured bindings, and outer assignment |
+| `m9_demo.tiny` | Both | Numeric/Boolean core and LLVM execution |
+| `m10_scope.tiny` | Both | Nested scopes and loop-local declarations |
+| `m11_numeric.tiny` | Both | Conditional expressions and safe branch selection |
+| `m11_study.tiny` | Interpreter | Conditional feedback and term selection; try `let` |
+| `m12_quiz.tiny` | Interpreter | Multiple accepted answers and data-derived scores; try `let`, then `while loop` |
+| `milestone1_examples.tiny` | Syntax/AST inspection | Original M1 design sketches; mixed string/number additions are rejected by semantic analysis |
+
 ## Language and execution modes
+
+Blocks use a colon and exactly four additional spaces of indentation.
+Comments start with `#`, and Boolean literals are `True` and `False`.
+Declarations use `let name = expression`; assignment uses `name = expression`.
+Expressions include `+`, `-`, `*`, `/`, `%`, `==`, `!=`, `<`, `<=`, `>`, `>=`,
+`and`, `or`, and `not`. Input and output use `ask(prompt)` and `show(expression)`.
+Complete statement syntax, token rules, and semantic checks are in
+[FRONTEND.md](docs/FRONTEND.md).
 
 | Feature | Interpreter | Compiler |
 | --- | --- | --- |

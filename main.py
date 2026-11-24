@@ -59,7 +59,10 @@ def _choose_file():
     examples = sorted((ROOT / "Examples").glob("*.tiny"))
     print("Select a StudyLang source file:")
     for index, example in enumerate(examples, 1):
-        print(f"{index}. {example.name}")
+        label = example.name
+        if example.name == "milestone1_examples.tiny":
+            label += " (M1 syntax-only design sketches)"
+        print(f"{index}. {label}")
     print("P. Enter another file path\nB. Back")
     while True:
         choice = input("Selection: ").strip()
