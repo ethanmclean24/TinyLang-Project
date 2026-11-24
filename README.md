@@ -1,7 +1,7 @@
 # StudyLang
 **Version:** 0.1  
 **Author:** Ethan McLean  
-**Current Milestone:** M7 — Semantic Analysis
+**Current Milestone:** M8 — Interpreter
 
 ## 1. Language Purpose
 A simple language with easy inputs and outputs that makes it easy for students to add course materials (like terms or questions) and study using simple console input/output.
@@ -15,7 +15,7 @@ Students looking for a way to study their course material. Little to none prior 
 3. Built in functions
 
 ## 4. Required Common-Core Direction
-Your TinyLang will eventually support numeric and Boolean values; variables,
+StudyLang supports numeric and Boolean values; variables,
 declaration and assignment; arithmetic/comparison/logical expressions; output;
 conditional execution with optional else; while-style repetition; blocks; and comments.
 
@@ -70,7 +70,7 @@ See `examples/milestone1_examples.tiny`.
 - [x] AST — M5
 - [x] AST structural validation, walk, and metrics — M6
 - [x] Semantic analysis
-- [ ] Interpreter — later
+- [x] Interpreter — M8
 - [ ] LLVM backend/JIT — later
 
 ## 12. Setup and verification
@@ -91,8 +91,8 @@ python3 tests/check_milestone1.py
 `frontend.py` displays the new study-session source, parse tree, and AST.
 `inspect_tokens.py` displays the contextual tokens consumed by the same parser,
 including their positions and generated indentation markers. Neither executes
-StudyLang statements or asks for input. `main.py` remains the historical M1
-identity entry point; use `frontend.py` for this milestone's demonstration.
+StudyLang statements or asks for input. `main.py` remains the M1 identity
+entry point. Use `run.py` to execute a StudyLang program.
 
 ## 13. Frontend API and boundaries
 - `create_parser()` returns a Lark LALR parser with StudyLang indentation handling.
@@ -124,3 +124,26 @@ AST on success and raises `SemanticError` for a semantic violation.
   runtime checks.
 
 Run `python3 semantic.py` for positive and negative examples.
+
+## 14. Running StudyLang
+
+```sh
+python3 run.py examples/m8_scope.tiny
+python3 run.py examples/m3_m5_demo.tiny
+```
+
+The study-session example prompts twice. Try answering `yes` and then `no`.
+The runner parses the source, validates the AST, checks semantics, and then
+executes the program. Errors go to stderr and give the command exit status 1.
+
+- `show` prints standalone Booleans as `true` or `false`, following the
+  instructor example. `ask` displays its prompt and reads one line of text.
+- Variables keep the type of their initial runtime value. Arrays can contain
+  mixed types. Array indices start at zero and must be within bounds. Indexed
+  assignment updates the array in place.
+- Functions use lexical scope. A call must reach a `return` to produce a value.
+  Running off the end of a function raises a runtime error.
+- Each `while` loop has a default limit of 100,000 iterations, matching the
+  instructor example.
+
+See [M8_EVIDENCE.md](M8_EVIDENCE.md) for the supported AST nodes and execution traces.
